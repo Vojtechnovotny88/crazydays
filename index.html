@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crazy Days odpočet</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 40px 28px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: clamp(28px, 5vw, 52px);
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 22px 12px;
+    }
+
+    .number {
+      display: block;
+      font-size: clamp(34px, 6vw, 64px);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .label {
+      font-size: 15px;
+      opacity: 0.85;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .finished {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      margin-top: 24px;
+    }
+
+    .note {
+      margin-top: 24px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 680px) {
+      .countdown {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Do crazy days zbývá už jen:</h1>
+
+    <div class="countdown" id="countdown">
+      <div class="box">
+        <span class="number" id="days">0</span>
+        <span class="label">Dní</span>
+      </div>
+      <div class="box">
+        <span class="number" id="hours">0</span>
+        <span class="label">Hodin</span>
+      </div>
+      <div class="box">
+        <span class="number" id="minutes">0</span>
+        <span class="label">Minut</span>
+      </div>
+      <div class="box">
+        <span class="number" id="seconds">0</span>
+        <span class="label">Sekund</span>
+      </div>
+    </div>
+
+    <div class="finished" id="finished" style="display:none;">Crazy Days právě začaly 🎉</div>
+
+    <div class="note">
+      Datum odpočtu nastavíš v kódu v řádku <strong>targetDate</strong>.
+    </div>
+  </div>
+
+  <script>
+    // TADY si uprav cílové datum a čas
+    // Formát: RRRR-MM-DDTHH:MM:SS
+    const targetDate = new Date("2026-05-01T00:00:00").getTime();
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const countdownEl = document.getElementById("countdown");
+    const finishedEl = document.getElementById("finished");
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdownEl.style.display = "none";
+        finishedEl.style.display = "block";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      daysEl.textContent = days;
+      hoursEl.textContent = String(hours).padStart(2, "0");
+      minutesEl.textContent = String(minutes).padStart(2, "0");
+      secondsEl.textContent = String(seconds).padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
